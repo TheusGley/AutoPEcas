@@ -4,6 +4,7 @@ import 'package:autopecas/pages/fornecedorPage.dart';
 import 'package:autopecas/pages/produtosPage.dart';
 import 'package:autopecas/pages/vendasPage.dart';
 import 'package:autopecas/widgets/custom_drawer.dart';
+import 'package:autopecas/pages/addCategoriaPage.dart';
 import 'package:flutter/material.dart';
 import 'categoriaPage.dart';
 
@@ -21,35 +22,6 @@ class _HomePageState extends State<HomePage> {
     return true;
   }
 
- /* Future<List<dynamic>?> _getData() async {
-
-
-    final url = Uri.https(
-      'www.gleydevelopment.com',
-      '/api-place/',
-
-    );
-    final response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': "Bearer $token",
-      },
-    );
-
-
-    switch (response.statusCode) {
-      case 200 :
-        return json.decode(response.body);
-
-      case 401 :
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => LoginPage())
-        );
-        return json.decode(response.body);
-    }
-  }
-*/
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +79,7 @@ Widget _homePage(BuildContext context){
         children: [
           Scaffold(
             appBar:AppBar(
+              iconTheme: IconThemeData(color: Colors.white),
               backgroundColor: Colors.black,
               title:
               Row(
@@ -127,7 +100,7 @@ Widget _homePage(BuildContext context){
             backgroundColor: Colors.black,
             body: categoriaPage(),
             drawer: CustomDrawer(_pageController),
-          ),//Primeira age
+          ),
           Scaffold(
               appBar: AppBar(
                 backgroundColor: Colors.black,
@@ -144,12 +117,12 @@ Widget _homePage(BuildContext context){
                         fontWeight: FontWeight.w600
                     ),)
                   ],
-
+//Fazer pagina de categoria onde sers cadastradas as categorias
                 ),
               ),
               drawer: CustomDrawer(_pageController),
               backgroundColor: Colors.black,
-              body: ColaboradoresPage()
+              body: ColaboradoresPage(),
           ), // segunda Page
           Scaffold(
               appBar:AppBar(
@@ -258,7 +231,35 @@ Widget _homePage(BuildContext context){
                   VendasPage()
 
               )
-          ),//sexta page
+          ),
+          Scaffold(
+              appBar:AppBar(
+                backgroundColor: Colors.black,
+                title:
+                Row(
+                  children: [
+                    Padding(padding: EdgeInsets.only(left: 100)),
+                    Text('Auto',style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600
+                    ),),
+                    Text('Sport',style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.w600
+                    ),)
+                  ],
+
+                ),
+              ),
+              drawer: CustomDrawer(_pageController),
+              body:
+              Container(
+                  child:
+                  addCategoriaPage(),
+
+              )
+          )
+  //sexta page
 
 
 

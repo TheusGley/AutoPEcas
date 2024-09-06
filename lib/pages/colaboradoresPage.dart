@@ -1,5 +1,10 @@
+import 'dart:ffi';
+
+import 'package:autopecas/def/bd_con.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'homePage.dart';
 
 class ColaboradoresPage extends StatefulWidget {
    ColaboradoresPage({super.key});
@@ -9,17 +14,22 @@ class ColaboradoresPage extends StatefulWidget {
 }
 
 class _ColaboradoresPageState extends State<ColaboradoresPage> {
-   TextEditingController _controllerUsuario = TextEditingController();
+   TextEditingController _controllerNome = TextEditingController();
+
+   TextEditingController _controllerCpf  = TextEditingController();
 
    TextEditingController _controllerEmail = TextEditingController();
+
+   TextEditingController _controllerTelefone = TextEditingController();
+
+   TextEditingController _controllerLogin = TextEditingController();
 
    TextEditingController _controllerSenha = TextEditingController();
 
    TextEditingController _controllerConfirm = TextEditingController();
 
-   TextEditingController _controllerNome = TextEditingController();
+   TextEditingController _controllerUsuario = TextEditingController();
 
-   TextEditingController _controllerTelefone = TextEditingController();
 
    GlobalKey<FormState> _formKey  = GlobalKey<FormState>();
 
@@ -27,6 +37,15 @@ class _ColaboradoresPageState extends State<ColaboradoresPage> {
 
    String? _errorText ;
    String?  _errorName ;
+
+   Future<void> _insert (String table , String nome , String cpf,String email, String tel,String login , String pass) async {
+
+     int cpf_format = int.parse(cpf);
+     int tel_format = int.parse(tel);
+
+     Bd_con conn = Bd_con();
+     conn.cadColaboradores(table, nome, cpf_format, email, tel_format, login, pass);
+   }
 
    @override
   Widget build(BuildContext context) {
@@ -84,7 +103,7 @@ class _ColaboradoresPageState extends State<ColaboradoresPage> {
                     keyboardType: TextInputType.name,
                     controller: _controllerNome,
                     decoration: InputDecoration(
-                      labelText: " Nome e Sobrenome",
+                      labelText: " Nome ",
                       labelStyle: TextStyle(color: Colors.black),
                       border: null,
                     ),
@@ -110,10 +129,10 @@ class _ColaboradoresPageState extends State<ColaboradoresPage> {
                   ),
                   child: TextFormField(
                     onChanged: (value){
-                      if (value.length >= 10)
+                      if (value.length >= 11)
                       {
                         setState(() {
-                          _errorName = "Coloque apenas 10 caracteres " ;
+                          _errorName = "Coloque apenas 11 caracteres " ;
 
                         });
 
@@ -127,14 +146,14 @@ class _ColaboradoresPageState extends State<ColaboradoresPage> {
                       }
                     },
                     inputFormatters: [
-                      LengthLimitingTextInputFormatter(10),
+                      LengthLimitingTextInputFormatter(11),
                       FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
                     ],
-                    controller: _controllerUsuario,
-                    keyboardType: TextInputType.name,
+                    controller: _controllerCpf,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       errorText: _errorName,
-                      labelText: " Usuario",
+                      labelText: " Cpf ",
                       labelStyle: TextStyle(color: Colors.black),
                       border: null,
                     ),
@@ -203,6 +222,39 @@ class _ColaboradoresPageState extends State<ColaboradoresPage> {
                 ),
               ),
               Padding(
+                padding: EdgeInsets.only(top: 20.0),
+                child: Container(
+                  width: 280,
+                  decoration: BoxDecoration(
+                    color: Colors.indigo,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.indigo,
+                      width: 3,
+                    ),
+                  ),
+                  child:
+                  TextFormField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+
+                    ],
+                    keyboardType: TextInputType.name,
+                    controller: _controllerUsuario,
+                    decoration: InputDecoration(
+                      labelText: " Usuario ",
+                      labelStyle: TextStyle(color: Colors.black),
+                      border: null,
+                    ),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              Padding(
                 padding: EdgeInsets.only(top: 40.0),
                 child: Container(
                   width: 280,
@@ -217,23 +269,23 @@ class _ColaboradoresPageState extends State<ColaboradoresPage> {
                   child: TextFormField(
                     keyboardType: TextInputType.visiblePassword,
                     controller: _controllerSenha,
+                    obscureText: _obscureText,
                     decoration: InputDecoration(
                       errorText: _errorText,
                       labelText: " Senha",
                       labelStyle: TextStyle(color: Colors.black),
                       border: null,
-                      suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscureText
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscureText =
-                              !_obscureText; // Alterna a visibilidade
-                            });
-                          }),
+                        suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscureText
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscureText = !_obscureText;
+                              });
+                            }),
                     ),
                     style: TextStyle(
                       color: Colors.white,
@@ -276,8 +328,7 @@ class _ColaboradoresPageState extends State<ColaboradoresPage> {
                           ),
                           onPressed: () {
                             setState(() {
-                              _obscureText =
-                              !_obscureText; // Alterna a visibilidade
+                              _obscureText = !_obscureText;
                             });
                           }),
                     ),
@@ -289,10 +340,38 @@ class _ColaboradoresPageState extends State<ColaboradoresPage> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor:  Colors.indigo,
-                    fixedSize: Size(200, 50),
                   ),
-                  onPressed: () {} ,
-                  child: Text("Enviar",
+                  onPressed: () {
+                    if (_controllerSenha.text == _controllerConfirm.text) {
+                      try {
+                        _insert(
+                            "vendedor",
+                            _controllerNome.text,
+                            _controllerCpf.text.toString(),
+                            _controllerEmail.text,
+                            _controllerTelefone.text,
+                            _controllerUsuario.text,
+                            _controllerSenha.text);
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                HomePage(), // Substitua com o widget da nova página
+                          ),
+                        );
+                      }
+                      catch (e) {
+                        showCancel(context, e);
+
+                      }
+                    }
+                    else{
+                      setState(() {
+                        _errorText = "As senhas não conferem" ;
+                      });
+                    }
+                  } ,
+                  child: Text("Cadastrar",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -306,3 +385,32 @@ class _ColaboradoresPageState extends State<ColaboradoresPage> {
       );
   }
 }
+ void showCancel(BuildContext context, Object e ) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Ocorreu um erro' + e.toString(),
+          style: TextStyle(
+            color: Colors.lightBlueAccent,
+          ),),
+        content: Text(
+            "Por favor tente novamente mais tarde "),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Ok'),
+            onPressed: ()  {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ),
+              );
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
