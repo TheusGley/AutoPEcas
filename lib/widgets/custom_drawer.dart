@@ -134,6 +134,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       DrawerTiles(Icons.production_quantity_limits, "Produtos",widget.pageController,3),
                       DrawerTiles(Icons.add_box, "Fornecedor",widget.pageController,4),
                       DrawerTiles(Icons.account_balance_wallet, "Vendas",widget.pageController,5),
+                      DrawerTiles(Icons.list_alt_rounded, "Categorias",widget.pageController,6),
 
                         SizedBox(height: 150,),
                        /* ElevatedButton(

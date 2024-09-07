@@ -10,7 +10,19 @@ import 'package:postgres/postgres.dart';
 class Bd_con {
 
 
-  Future<List<List<dynamic>>> select (String column, String table, String restricao, String obj) async {
+
+
+  Future<List<List<dynamic>>> authentication () async {
+    final List<List<dynamic>> response = await select_all(
+        'usuario, senha', 'vendedor');
+
+
+    return response ;
+  }
+
+
+
+    Future<List<List<dynamic>>> select (String column, String table, String restricao, String obj) async {
     final conn = await Connection.open(
       Endpoint(
         host: '192.168.100.4',
@@ -116,6 +128,67 @@ class Bd_con {
   }
   //Def para cadastro fornecedor ou cliente
 
+
+
+  Future<bool>  cadastro (String table , String nome,) async {
+
+    final conn = await Connection.open(
+      Endpoint(
+        host: '192.168.100.4',
+        port: 5432,
+        database: 'autopecas',
+        username: 'postgres',
+        password: 'admin',
+      ),
+      settings: ConnectionSettings(sslMode: SslMode.disable),
+    );
+
+    print('Conexão estabelecida');
+
+    // Executa a consulta SQL
+    final result = await conn.execute(
+        'insert into $table (descricao) values (\'$nome\')'
+    );
+
+    print('Resultado da query: $result');
+
+    await conn.close();
+
+    // Retorna o resultado diretamente como uma lista de listas
+
+    return true;
+  }
+
+
+  Future<bool>  cadFornecedor (String table , String nome , int cnpj,String email, int tel,String endereco ) async {
+
+    final conn = await Connection.open(
+      Endpoint(
+        host: '192.168.100.4',
+        port: 5432,
+        database: 'autopecas',
+        username: 'postgres',
+        password: 'admin',
+      ),
+      settings: ConnectionSettings(sslMode: SslMode.disable),
+    );
+
+    print('Conexão estabelecida');
+
+    // Executa a consulta SQL
+    final result = await conn.execute(
+        'insert into $table (nome, cnpj, email, telefone, endereco) values (\'$nome\', \'$cnpj\', \'$email\', \'$tel\', \'$endereco\')'
+    );
+
+    print('Resultado da query: $result');
+
+    await conn.close();
+
+    // Retorna o resultado diretamente como uma lista de listas
+
+    return true;
+  }
+
   Future<bool>  cadastroGeral (String table , String nome , int cpf,String email, int tel,String endereco , String placa) async {
 
     final conn = await Connection.open(
@@ -144,6 +217,39 @@ class Bd_con {
 
     return true;
   }
+
+
+  Future<bool>  cadastroProduto (String table , String descricao, double preco_custo , double preco_venda, int estoque_atual , String id_fornecedor, String id_categoria) async {
+    //
+    final conn = await Connection.open(
+      Endpoint(
+        host: '192.168.100.4',
+        port: 5432,
+        database: 'autopecas',
+        username: 'postgres',
+        password: 'admin',
+      ),
+      settings: ConnectionSettings(sslMode: SslMode.disable),
+    );
+
+    print('Conexão estabelecida');
+
+    // Executa a consulta SQL
+    final result = await conn.execute(
+        'INSERT INTO $table (descricao, preco_custo, preco_venda, estoque_atual, id_fornecedor, id_categoria) '
+            'VALUES (\'$descricao\', \'$preco_custo\', \'$preco_venda\', \'$estoque_atual\', \'$id_fornecedor\', \'$id_categoria\')'
+    );
+
+    print('Resultado da query: $result');
+
+    await conn.close();
+
+    // Retorna o resultado diretamente como uma lista de listas
+
+    return true;
+  }
+
+
 
 }
 

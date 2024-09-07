@@ -58,17 +58,13 @@ class _categoriaPageState extends State<categoriaPage> {
 
      List<String> parts = newValue.split('-').map((e) => e.trim()).toList();
 
-     // O primeiro valor é o que está antes da vírgula
      String idCategoria = parts[0];
      print(idCategoria);
 
-       // Inicializa o mapa para evitar erros de null
        _produtos = {};
 
-       // Map<String, dynamic> where = {'id_categoria': newValue};
        final List<List<dynamic>> produtoResponse = await connect.select('descricao, preco_venda', 'produto', 'id_categoria', idCategoria);
 
-       // Verifica se obteve algum resultado
        if (produtoResponse.isEmpty) {
          print("Nenhuma categoria encontrada.");
          return false;

@@ -1,12 +1,67 @@
+import 'package:autopecas/def/bd_con.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'homePage.dart';
 
 
-class loginPage extends StatelessWidget {
+class loginPage extends StatefulWidget {
    loginPage({super.key});
 
+  @override
+  State<loginPage> createState() => _loginPageState();
+}
+
+class _loginPageState extends State<loginPage> {
   bool _obscureText = true;
+  Bd_con conn = Bd_con();
+
+  List<Map<String, String>> _users = [];
+
+
+  TextEditingController _controllerUsuario = TextEditingController();
+  TextEditingController _controllerSenha = TextEditingController();
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    userLogin();
+
+  }
+
+
+  Future<void> userLogin() async {
+    _users = [];
+
+    final List<List<dynamic>> produtoResponse = await conn.authentication();
+
+    if (produtoResponse.isEmpty) {
+      print("Nenhum usuário encontrado.");
+      return;
+    }
+
+    // Preenche a lista de usuários com nome e senha
+    for (var row in produtoResponse) {
+      _users.add({'usuario': row[0], 'senha': row[1]}); // row[0] = usuário, row[1] = senha
+    }
+
+    print("Usuários encontrados: $_users");
+  }
+
+  Future<bool> _login(String usuario, String senha) async {
+
+    // Verifica se o usuário e a senha estão corretos
+    for (var user in _users) {
+      if (user['usuario'] == usuario && user['senha'] == senha) {
+        print (usuario);
+        print (senha);
+
+        return true; // Login bem-sucedido
+      }
+    }
+
+    return false; // Login falhou
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +89,7 @@ class loginPage extends StatelessWidget {
 
 
   }
+
   Widget _LoginPage(context) {
     return
       Material(
@@ -80,7 +136,7 @@ class loginPage extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: TextField(
-                          // controller: _controllerName,
+                          controller: _controllerUsuario,
                           decoration: InputDecoration(
                             labelText: "Email ou Usuario",
                             labelStyle: TextStyle(color: Colors.black),
@@ -97,8 +153,8 @@ class loginPage extends StatelessWidget {
                           padding: EdgeInsets.symmetric(horizontal: 20.0),
                           child:
                           TextField(
-                            // obscureText: _obscureText,
-                            // controller: _controllerPass,
+                            obscureText: _obscureText,
+                            controller: _controllerSenha,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
@@ -115,14 +171,13 @@ class loginPage extends StatelessWidget {
                                         : Icons.visibility_off,
                                   ),
                                   onPressed: () {
-                                    // setState(() {
-                                    //   _obscureText =
-                                    //   !_obscureText; // Alterna a visibilidade
-                                    // });
+                                    setState(() {
+                                      _obscureText =
+                                      !_obscureText; // Alterna a visibilidade
+                                    });
                                   }),
                             ),
                           )
-
                       ),
                     ],
                   ),
@@ -130,11 +185,16 @@ class loginPage extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.only(top:20.0, left: 20.0, right: 20.0, bottom: 35.0),
-                child: ElevatedButton(onPressed: () {
-                  // _fetchUserData(_controllerName.text, _controllerPass.text);
-                  Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HomePage())
-                  );
+                child: ElevatedButton(onPressed: () async {
+                  bool loginSuccess = await _login(_controllerUsuario.text, _controllerSenha.text);
+                  if (loginSuccess ) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage())
+                    );
+                  }
+                  else {
+                    showCancel(context);
+                  }
                 },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
@@ -171,5 +231,29 @@ class loginPage extends StatelessWidget {
         ),
       );
   }
-
 }
+
+void showCancel(BuildContext context, ) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Ocorreu um erro' ,
+          style: TextStyle(
+            color: Colors.lightBlueAccent,
+          ),),
+        content: Text(
+            "Por favor verifique as credenciais!"),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Ok'),
+            onPressed: ()  {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+

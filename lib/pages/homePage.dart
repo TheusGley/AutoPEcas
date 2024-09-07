@@ -5,6 +5,7 @@ import 'package:autopecas/pages/produtosPage.dart';
 import 'package:autopecas/pages/vendasPage.dart';
 import 'package:autopecas/widgets/custom_drawer.dart';
 import 'package:autopecas/pages/addCategoriaPage.dart';
+import 'package:autopecas/pages/vendasPage.dart';
 import 'package:flutter/material.dart';
 import 'categoriaPage.dart';
 
@@ -248,6 +249,32 @@ Widget _homePage(BuildContext context){
                         fontWeight: FontWeight.w600
                     ),)
                   ],
+                ),
+              ),
+              drawer: CustomDrawer(_pageController),
+              body:
+              Container(
+                child:
+                addCategoriaPage(),
+
+              )
+          ),
+          Scaffold(
+              appBar:AppBar(
+                backgroundColor: Colors.black,
+                title:
+                Row(
+                  children: [
+                    Padding(padding: EdgeInsets.only(left: 100)),
+                    Text('Auto',style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600
+                    ),),
+                    Text('Sport',style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.w600
+                    ),)
+                  ],
 
                 ),
               ),
@@ -255,7 +282,7 @@ Widget _homePage(BuildContext context){
               body:
               Container(
                   child:
-                  addCategoriaPage(),
+                  VendasPage(),
 
               )
           )
