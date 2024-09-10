@@ -2,12 +2,15 @@ import 'package:autopecas/pages/clientesPage.dart';
 import 'package:autopecas/pages/colaboradoresPage.dart';
 import 'package:autopecas/pages/fornecedorPage.dart';
 import 'package:autopecas/pages/produtosPage.dart';
+import 'package:autopecas/pages/updateItem.dart';
+import 'package:autopecas/pages/update.dart';
 import 'package:autopecas/pages/vendasPage.dart';
 import 'package:autopecas/widgets/custom_drawer.dart';
 import 'package:autopecas/pages/addCategoriaPage.dart';
 import 'package:autopecas/pages/vendasPage.dart';
 import 'package:flutter/material.dart';
 import 'categoriaPage.dart';
+import 'delete.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -285,8 +288,64 @@ Widget _homePage(BuildContext context){
                   VendasPage(),
 
               )
+          ),
+          Scaffold(
+              appBar:AppBar(
+                backgroundColor: Colors.black,
+                title:
+                Row(
+                  children: [
+                    Padding(padding: EdgeInsets.only(left: 100)),
+                    Text('Auto',style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600
+                    ),),
+                    Text('Sport',style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.w600
+                    ),)
+                  ],
+
+                ),
+              ),
+              drawer: CustomDrawer(_pageController),
+              backgroundColor: Colors.black,
+
+              body:
+              Container(
+                child:
+                UpdateItem(),
+              )
+          ),          Scaffold(
+              appBar:AppBar(
+                backgroundColor: Colors.black,
+                title:
+                Row(
+                  children: [
+                    Padding(padding: EdgeInsets.only(left: 100)),
+                    Text('Auto',style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600
+                    ),),
+                    Text('Sport',style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.w600
+                    ),)
+                  ],
+
+                ),
+              ),
+              drawer: CustomDrawer(_pageController),
+              backgroundColor: Colors.black,
+
+              body:
+              Container(
+                child:
+                DeletePage(),
+              )
           )
-  //sexta page
+
+
 
 
 

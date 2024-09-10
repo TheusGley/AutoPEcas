@@ -26,8 +26,9 @@ class _ProdutosPageState extends State<ProdutosPage> {
   late String _selectedCategorias = _categorias.first;
   late String _selectedFornecedor  = _fornecedor.first;
   late Map<String,dynamic> _produtos  = {};
-  late String responseQuery  ;
   late String error_message ;
+  List<String> InitialValue = [' '];
+
 
 
 
@@ -78,8 +79,8 @@ class _ProdutosPageState extends State<ProdutosPage> {
 
 
 
-  Future<bool> _cadProdutos (String descricao, String preco_custo , String preco_venda, String estoque_atual , String id_fornecedo, String id_categoria, ) async {
-    //
+  Future<bool> _cadProdutos (String descricao, String preco_custo , String preco_venda, String estoque_atual , String id_categoria , String id_fornecedo, ) async {
+
     int  estoque_format = int.parse(estoque_atual);
     double preco_custo_format = double.parse(preco_custo);
     double preco_venda_format = double.parse(preco_venda);
@@ -280,7 +281,7 @@ class _ProdutosPageState extends State<ProdutosPage> {
               ),
               Padding(padding: EdgeInsets.only(top:20)),
               DropdownMenu<String>(
-                initialSelection: _categorias.isNotEmpty ? _categorias.first : null,
+                initialSelection: InitialValue.first,
                 onSelected: (String? newValue) {
                   // This is called when the user selects an item.
                   setState(() {
@@ -303,7 +304,7 @@ class _ProdutosPageState extends State<ProdutosPage> {
               ),
               Padding(padding: EdgeInsets.only(top:20)),
               DropdownMenu<String>(
-                initialSelection:  _fornecedor.isNotEmpty ? _fornecedor.first : null,
+                initialSelection:InitialValue.first,
                 onSelected: (String? newValue) {
                   // This is called when the user selects an item.
                   setState(() {
@@ -367,7 +368,7 @@ class _ProdutosPageState extends State<ProdutosPage> {
       );
   }
 }
-void showCancel(BuildContext context, Object e ) {
+  void showCancel(BuildContext context, Object e ) {
   showDialog(
     context: context,
     builder: (BuildContext context) {

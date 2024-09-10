@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 
 import 'package:flutter/material.dart';
 import 'package:autopecas/def/bd_con.dart';
@@ -14,6 +14,7 @@ class categoriaPage extends StatefulWidget {
 class _categoriaPageState extends State<categoriaPage> {
    late List<String> _categorias = [' '];
    late String _selectedValue ;
+   List<String> InitialValue = [' '];
    late Map<String,dynamic> _produtos  = {};
    late String responseQuery  ;
 
@@ -97,7 +98,7 @@ class _categoriaPageState extends State<categoriaPage> {
              fontWeight: FontWeight.w700,
            ),),),
             DropdownMenu<String>(
-              initialSelection: _categorias.first,
+              initialSelection: InitialValue.first,
               onSelected: (String? newValue) {
                 // This is called when the user selects an item.
                 setState(() {
@@ -166,7 +167,7 @@ class _categoriaPageState extends State<categoriaPage> {
                                         ),
                                       ),
                                       SizedBox(width: 20),
-                                      Text(_produtos.values.elementAt(index).toString(), // Preço fictício
+                                      Text(_produtos.values.elementAt(index).toString(),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 20,
